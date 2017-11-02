@@ -12,27 +12,46 @@ function initMap() {
     });
     var marker0 = new google.maps.Marker({
 	  position: edwardsCampus,
-	  map: map
+	  map: map,
+	  title: "KU Edwards Campus",
+	  animation: google.maps.Animation.DROP
 	});
 	var marker1 = new google.maps.Marker({
 	  position: kansasCityMo,
-	  map: map
+	  map: map,
+	  title: "Kansas City",
+	  animation: google.maps.Animation.DROP
 	});
 	var marker2 = new google.maps.Marker({
 	  position: denverCo,
-	  map: map
+	  map: map,
+	  title: "Denver",
+	  animation: google.maps.Animation.DROP
 	});
 	var marker3 = new google.maps.Marker({
 	  position: sanFranciscoCa,
-	  map: map
+	  map: map,
+	  title: "San Francisco",
+	  animation: google.maps.Animation.DROP
 	});
 	var marker4 = new google.maps.Marker({
 	  position: newYorkNy,
-	  map: map
+	  map: map,
+	  title: "New York",
+	  animation: google.maps.Animation.DROP
 	});
 	var marker5 = new google.maps.Marker({
 	  position: austinTx,
-	  map: map
+	  map: map,
+	  title: "Austin",
+	  animation: google.maps.Animation.DROP
+	});
+	var test = "KU Edwards Campus Info Window";
+	var window0 = new google.maps.InfoWindow({
+		content: test
+	});
+	marker0.addListener("click", function() {
+		window0.open(map, marker0);
 	});
 }
 
