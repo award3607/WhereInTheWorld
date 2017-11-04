@@ -1,5 +1,16 @@
 # WhereInTheWorld
 
+## Assignments ##
+------------------
+### Front End ###
+* Amira
+* Dave
+### Back End ###
+* Andrew
+* Denise
+
+
+
 ## API keys ##
 -----------
 * Google Maps:
