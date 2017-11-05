@@ -1,5 +1,4 @@
 function initMap() {
-    var uluru = {lat: -25.363, lng: 131.044};
     var edwardsCampus = {lat: 38.899146, lng: -94.724889};
     var kansasCityMo = {lat: 39.0997, lng: -94.5786};
     var denverCo = {lat: 39.761849, lng: -104.880625};
