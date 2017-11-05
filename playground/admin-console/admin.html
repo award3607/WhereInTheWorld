@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Admin Console</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="jumbotron text-center"><h1>Where In The World Admin Console</h1></div>
+
+		<div class="row">
+			<div class="panel panel-default">
+				<div class="panel-heading"><h3>Destinations</h3></div>
+				<div class="panel-body">
+					<table class="table table-striped table-hover">
+						<thead>
+							<tr>
+								<th>City</th>
+								<th>State</th>
+								<th>Type</th>
+								<th>Latitude</th>
+								<th>Longitude</th>
+								<th>Airport</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+				
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="panel panel-default">
+				<div class="panel-heading"><h3>Add Destination</h3></div>
+				<div class="panel-body">
+					<div class="form-group">
+						<label for="dest-city">City</label>
+						<input type="text" name="dest-city" id="dest-city" class="form-control">
+					</div>
+					<div class="form-group">
+						<label for="dest-state">State</label>
+						<input type="text" name="dest-state" id="dest-state" class="form-control">		
+					</div>
+					<div class="form-group">
+						<label for="dest-type">Destination Type</label>
+						<input type="text" name="dest-type" id="dest-type" class="form-control">
+					</div>
+					<div class="form-group">
+						<label for="dest-lat">Latitude</label>
+						<input type="text" name="dest-lat" id="dest-lat" class="form-control">
+					</div>
+					<div class="form-group">
+						<label for="dest-lng">Longitude</label>
+						<input type="text" name="dest-lng" id="dest-lng" class="form-control">
+					</div>
+					<div class="form-group">
+						<label for="dest-airport">Airport</label>
+						<input type="text" name="dest-airport" id="dest-airport" class="form-control">
+					</div>
+					<button id="submit-button" class="btn btn-primary">Submit</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="admin.js"></script>
+
+</body>
+</html>
