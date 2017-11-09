@@ -26,10 +26,11 @@ function displayResults() {
 
 function processResults(data) {
 	var markers = data.val();
-    console.log(markers);
+    // console.log(markers);
     //create array of keys
 	var keys = Object.keys(markers);
-    //keys = keys.slice(0, 4);
+    keys = shuffle(keys);
+    console.log(keys);
 	// console.log(markers);
 	keys.forEach(function(key) {
 		// console.log(markers[key]);
@@ -38,16 +39,22 @@ function processResults(data) {
 }
 
 function shuffle(array) {
-  var i = 0
-    , j = 0
-    , temp = null
+  var currentIndex = array.length, temporaryValue, randomIndex;
 
-  for (i = array.length - 1; i > 0; i -= 1) {
-    j = Math.floor(Math.random() * (i + 1))
-    temp = array[i]
-    array[i] = array[j]
-    array[j] = temp
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
   }
+
+  return array;
 }
 
 

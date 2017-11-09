@@ -3,28 +3,54 @@
 <head>
     <meta charset="UTF-8">
 	<title>Where in the World</title>
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-	<!-- Bootswatch Styling for Improving the Aesthetics -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cerulean/bootstrap.min.css">
-	<!-- jQuery -->
-	<script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
 
 	<!-- Link to Moment.js should go here -->
     <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+    <style>
+    	#map {
+        height: 400px;
+        width: 100%;
+       }
+	</style>
 </head>
 <body>
     <div class="container">
         <div class="jumbotron"><h1>Where do you want to go?</h1></div>
-        <div class="col-md-8">
-            
-        </div>
         <div class="col-md-4">
-            <img src="assets/images/globe-earth-animation-background.gif" alt="Globe">
+            <div class="form-group">
+		      <label for="email">Destination Type</label>
+		      <input class="form-control" id="dest-type" placeholder="city, beach, or adventure" name="dest-type">
+		    </div>
+		    <div class="form-group">
+		      <label for="trip-length">Trip Length</label>
+		      <input class="form-control" id="trip-length" placeholder="trip length (days)" name="trip-length">
+		    </div>
+		    <div class="form-group">
+		      <label for="trip-adults">Number of Adults</label>
+		      <input class="form-control" id="trip-adults" placeholder="number of adults" name="trip-adults">
+		    </div>
+		    <div class="form-group">
+		      <label for="trip-children">Number of Children</label>
+		      <input class="form-control" id="trip-children" placeholder="number of children" name="trip-children">
+		    </div>
+		    <div class="form-group">
+		    	<button id="submit" type="submit" class="btn btn-default">Submit</button>
+		    	<button id="reset" type="submit" class="btn btn-default">Reset</button>
+		    </div>
+        </div>
+        <div class="col-md-8">
+            <div id="map"></div>
         </div>
     </div>
 
 	<script src="https://www.gstatic.com/firebasejs/4.6.1/firebase.js"></script>
+	<script defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASCVF1CXCVX0bJnrn4ZieA15TpLNNSD9M">
+    </script>
 	<script src="assets/javascript/app.js"></script>
 </body>
 </html>
