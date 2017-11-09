@@ -20,18 +20,36 @@ function initMap() {
 }
 
 function displayResults() {
-	ref.once("value", processResults, gotErr);
+    console.log("Hopefully adventure");
+	ref.orderByChild("destType").equalTo("adventure").once("value", processResults, gotErr);
 }
 
 function processResults(data) {
 	var markers = data.val();
+    console.log(markers);
+    //create array of keys
 	var keys = Object.keys(markers);
+    //keys = keys.slice(0, 4);
 	// console.log(markers);
 	keys.forEach(function(key) {
 		// console.log(markers[key]);
 		displayMarker(markers[key]);
 	});
 }
+
+function shuffle(array) {
+  var i = 0
+    , j = 0
+    , temp = null
+
+  for (i = array.length - 1; i > 0; i -= 1) {
+    j = Math.floor(Math.random() * (i + 1))
+    temp = array[i]
+    array[i] = array[j]
+    array[j] = temp
+  }
+}
+
 
 function gotErr(err) {
 	console.log("Error: " + err);
@@ -44,70 +62,39 @@ function displayMarker(destination) {
 		title: destination.destCity + ", " + destination.destState,
 		animation: google.maps.Animation.DROP
 	});
-	var window = new google.maps.InfoWindow({
-		content: destination.destCity
+	var w = new google.maps.InfoWindow({
+		content: destination.destCity + ", " + destination.destState
 	});
 	marker.addListener("click", function() {
-		window.open(map, marker);
+		w.open(map, marker);
+		$("body").append("<script src=\"https://widgets.skyscanner.net/widget-server/js/loader.js\" async></script>");
 	});
 }
 
-// function initMap() {
-//     var edwardsCampus = {lat: 38.899146, lng: -94.724889};
-//     var kansasCityMo = {lat: 39.0997, lng: -94.5786};
-//     var denverCo = {lat: 39.761849, lng: -104.880625};
-//     var sanFranciscoCa = {lat: 37.727239, lng: -123.032229};
-//     var newYorkNy = {lat: 40.664274, lng: -73.9385};
-//     var austinTx = {lat: 30.307182, lng: -97.755996};
-//     var map = new google.maps.Map(document.getElementById('map'), {
-//       zoom: 5,
-//       center: edwardsCampus
-//     });
-//     var marker0 = new google.maps.Marker({
-// 	  position: edwardsCampus,
-// 	  map: map,
-// 	  title: "KU Edwards Campus",
-// 	  animation: google.maps.Animation.DROP
-// 	});
-// 	var marker1 = new google.maps.Marker({
-// 	  position: kansasCityMo,
-// 	  map: map,
-// 	  title: "Kansas City",
-// 	  animation: google.maps.Animation.DROP
-// 	});
-// 	var marker2 = new google.maps.Marker({
-// 	  position: denverCo,
-// 	  map: map,
-// 	  title: "Denver",
-// 	  animation: google.maps.Animation.DROP
-// 	});
-// 	var marker3 = new google.maps.Marker({
-// 	  position: sanFranciscoCa,
-// 	  map: map,
-// 	  title: "San Francisco",
-// 	  animation: google.maps.Animation.DROP
-// 	});
-// 	var marker4 = new google.maps.Marker({
-// 	  position: newYorkNy,
-// 	  map: map,
-// 	  title: "New York",
-// 	  animation: google.maps.Animation.DROP
-// 	});
-// 	var marker5 = new google.maps.Marker({
-// 	  position: austinTx,
-// 	  map: map,
-// 	  title: "Austin",
-// 	  animation: google.maps.Animation.DROP
-// 	});
-// 	var test = "KU Edwards Campus Info Window";
-// 	var window0 = new google.maps.InfoWindow({
-// 		content: test
-// 	});
-// 	marker0.addListener("click", function() {
-// 		window0.open(map, marker0);
-// 	});
+
+// var trip = {
+// 	transportation: "car",
+// 	rentalCar: true,
+// 	numPeople: 4,
+// 	budgetPerPerson: 500,
+// 	days: 4,
+// 	needHotel: true
+// 	totalBudget: this.numPeople * this.budgetPerPerson
+// 	//rental car cost: do we get a per day rate, or do we get total for the number of days?
+// 	//hotel cost: do we get a per day rate, or total for number of days
 // }
 
+// function makeWindow(dest) {
+// 	//build infowindow's content string
+// 	var contentString = "<div data-skyscanner-widget='LocationWidget' data-locale='en-US' data-destination-iata-code='MCI'>" + 
+// 						"</div>" + 
+// 						"<script src='https://widgets.skyscanner.net/widget-server/js/loader.js' async></script>";
+// 	var w = new google.map.InfoWindow({
+// 		content: 
+// 	})
+
+// 	return w;
+// }
 
 
 //KU Edwards Campus: 38.899146, -94.724889
