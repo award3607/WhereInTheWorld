@@ -14,25 +14,24 @@ const hotwireKey = "4hjyj79mhvxkvswbx5mur2xp";
 //global variables
 var destsArr = [];
 
-var hotelOptions = {
-	"dest": "Daytona Beach",
-	"startdate": "11/24/2017",
-	"enddate": "11/27/2017",
-	"rooms": "1",
-	"adults": "1",
-	"children": "0"
-};
+// var hotelOptions = {
+// 	"dest": "Daytona Beach",
+// 	"startdate": "11/24/2017",
+// 	"enddate": "11/27/2017",
+// 	"rooms": "1",
+// 	"adults": "1",
+// 	"children": "0"
+// };
 
-var carOptions = {
-	"dest":"Atlanta",
-	"startdate":"11/24/2017",
-	"enddate":"11/27/2017",
-	"pickuptime":"10:00",
-	"dropofftime":"13:30"
-};
+// var carOptions = {
+// 	"dest":"Atlanta",
+// 	"startdate":"11/24/2017",
+// 	"enddate":"11/27/2017",
+// 	"pickuptime":"10:00",
+// 	"dropofftime":"13:30"
+// };
 
-//firebase.initializeApp(firebaseConfig);
-//var ref = firebase.database().ref();
+
 var ref;
 var map;
 var markerArr = [];
@@ -55,37 +54,26 @@ $("#submit").on("click", function() {
 	var promiseDests = displayResults(destType);
 	$.when(promiseDests).done(function() {
 		console.log("Firebase calls complete");
-		console.log(destsArr);
+		// console.log(destsArr);
 		destsArr.forEach(function(dest) {
+			var hotelOptions = buildHotelOptions(dest, tripLength, numAdults, numChildren);
+			var carOptions = buildCarOptions(dest, tripLength);
+
 			var promiseHotel = requestData(hotelUrl, hotelOptions);
 			var promiseCar = requestData(carUrl, carOptions);
 			$.when(promiseHotel, promiseCar).done(function() {
-				console.log("Hotel response? ");
+				// console.log("Hotel response? ");
 				var hotelResult = promiseHotel.responseJSON.Result[0];
-				console.log(hotelResult);
-				console.log("Car response? ");
+				// console.log(hotelResult);
+				// console.log("Car response? ");
 				var carResult = promiseCar.responseJSON.Result[0]
-				console.log(carResult);
+				// console.log(carResult);
 				console.log("Hotwire API calls complete");
 				//displayResultRow needs to go in here.
 				displayResultRow(dest, hotelResult, carResult);
 			});
 		});
 	});
-	
-	//TODO: build hotelOptions object
-	//TODO: build carOptions object
-
-	//get array of destinations
-	//for each destination
-	//we build the hotelOption object
-	//we build the carOptions object
-
-	// var promiseHotel = requestData(hotelUrl, hotelOptions);
-	// var promiseCar = requestData(carUrl, carOptions);
-	// $.when(promiseHotel, promiseCar).done(function() {
-	// 	console.log("Hotwire API calls complete");
-	// });
 });
 
 $("#reset").on("click", function() {
@@ -101,6 +89,36 @@ $("#reset").on("click", function() {
 
 
 //Hotwire API section
+function buildHotelOptions(destination, days, adults, children) {
+	var startD = moment().add(7, "days");
+	var endD = startD.clone().add(days, "days");
+	//console.log(startD.format("MM/DD/YYYY"), endD.format("MM/DD/YYYY"));
+	var options = {
+		//"dest": "Daytona Beach",
+		"dest": destination.destLat + "," + destination.destLng,
+		"startdate": startD.format("MM/DD/YYYY"),
+		"enddate": endD.format("MM/DD/YYYY"),
+		"rooms": "1",
+		"adults": adults,
+		"children": children
+	};
+	return options;
+}
+
+function buildCarOptions(destination, days) {
+	var startD = moment().add(7, "days");
+	var endD = startD.clone().add(days, "days");
+	var options = {
+		//"dest": "Atlanta",
+		"dest": destination.destLat + "," + destination.destLng,
+		"startdate": startD.format("MM/DD/YYYY"),
+		"enddate": endD.format("MM/DD/YYYY"),
+		"pickuptime":"10:00",
+		"dropofftime":"13:30"
+	};
+	return options;
+}
+
 function generateSearchUrl(baseUrl, options) {
 
 	var url = baseUrl + "?apikey=" + hotwireKey + "&format=jsonp";
@@ -133,9 +151,9 @@ function requestData(apiUrl, options) {
 
 function displayResultRow(destination, hotelData, carData) {
 	var $row = $("<tr>");
-    $row.append($("<td>").text(destination.destCity))
-        .append($("<td>").html("<a href='" + hotelData.DeepLink + "' target='blank'>" + hotelData.TotalPrice + "</a>"))
-        .append($("<td>").html("<a href='" + carData.DeepLink + "' target='blank'>" + carData.TotalPrice + "</a>"));
+    $row.append($("<td>").text(destination.destCity + ", " + destination.destState))
+        .append($("<td>").html("<a href='" + hotelData.DeepLink + "' target='_blank'>$" + hotelData.TotalPrice + "</a>"))
+        .append($("<td>").html("<a href='" + carData.DeepLink + "' target='_blank'>$" + carData.TotalPrice + "</a>"));
     $("tbody").append($row);
 }
 
