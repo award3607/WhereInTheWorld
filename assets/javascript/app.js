@@ -55,7 +55,6 @@ $("#submit").on("click", function() {
 				var carResult = carData.responseJSON.Result[0];
 				// console.log(carResult);
 				console.log("Hotwire API calls complete");
-				//displayResultRow needs to go in here.
 				displayResultRow(dest, hotelResult, carResult);
 			});
 		//});
@@ -121,6 +120,7 @@ function generateSearchUrl(baseUrl, options) {
 
 function requestData(apiUrl, options) {
 	var searchUrl = generateSearchUrl(apiUrl, options);
+	console.log(searchUrl);
 	return $.ajax({
 		url: searchUrl,
 		method: "GET",

@@ -1,0 +1,22 @@
+html, body {
+	height: 100%;
+	margin: 50;
+}
+
+.jumbotron div {
+	
+}
+
+.jumbotron h1 {
+	font-family: 'Russo One', sans-serif;
+	color: #000081;
+}
+
+#map {
+     height: 400px;
+     width: 100%;
+}
+
+#table-container {
+	min-height: 400px;
+}
