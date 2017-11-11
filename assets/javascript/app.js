@@ -30,41 +30,36 @@ $("#submit").on("click", function() {
 	var tripLength = $("#trip-length").val().trim();
 	var numAdults = parseInt($("#trip-adults").val().trim());
 	var numChildren = parseInt($("#trip-children").val().trim());
+	console.log("Number of children: " + numChildren);
 	//console.log(destType, tripLength, numAdults, numChildren);
-	if (destType && tripLength && numAdults && numChildren) {
-		var promiseDests = displayResults(destType);
-		$.when(promiseDests).done(function() {
-			console.log("Firebase calls complete");
-			// console.log(destsArr);
-			//destsArr.forEach(function(dest) {
-				var dest = destsArr[0];
-				displayMarker(dest);
-				var hotelOptions = buildHotelOptions(dest, tripLength, numAdults, numChildren);
-				var carOptions = buildCarOptions(dest, tripLength);
+	var promiseDests = displayResults(destType);
+	$.when(promiseDests).done(function() {
+		console.log("Firebase calls complete");
+		// console.log(destsArr);
+		//destsArr.forEach(function(dest) {
+			var dest = destsArr[0];
+			displayMarker(dest);
+			var hotelOptions = buildHotelOptions(dest, tripLength, numAdults, numChildren);
+			var carOptions = buildCarOptions(dest, tripLength);
 
-				var hotelData = requestData(hotelUrl, hotelOptions);
-				var carData = requestData(carUrl, carOptions);
-				$.when(hotelData, carData).done(function() {
-					var hotelResult = hotelData.responseJSON.Result[0];
-					if (!hotelResult) {
-						hotelResult = hotelData.responseJSON.Result.HotelResult;
-					}
-					//console.log("Hotel response");
-					//console.log(hotelResult);
-					// console.log("Car response? ");
-					var carResult = carData.responseJSON.Result[0];
-					// console.log(carResult);
-					console.log("Hotwire API calls complete");
-					//displayResultRow needs to go in here.
-					displayResultRow(dest, hotelResult, carResult);
-				});
-			//});
-		});
-	}
-	else {
-		console.log("Fill out all fields");
-	}
-		
+			var hotelData = requestData(hotelUrl, hotelOptions);
+			var carData = requestData(carUrl, carOptions);
+			$.when(hotelData, carData).done(function() {
+				var hotelResult = hotelData.responseJSON.Result[0];
+				if (!hotelResult) {
+					hotelResult = hotelData.responseJSON.Result.HotelResult;
+				}
+				//console.log("Hotel response");
+				//console.log(hotelResult);
+				// console.log("Car response? ");
+				var carResult = carData.responseJSON.Result[0];
+				// console.log(carResult);
+				console.log("Hotwire API calls complete");
+				//displayResultRow needs to go in here.
+				displayResultRow(dest, hotelResult, carResult);
+			});
+		//});
+	});	
 });
 
 $("#reset").on("click", function() {
@@ -76,6 +71,8 @@ $("#reset").on("click", function() {
 	clearMarkers();
 	destsArr = [];
 	$("tbody").empty();
+	map.setCenter({lat: 39.0997, lng: -94.5786});
+	map.setZoom(4);
 });
 
 
@@ -83,12 +80,16 @@ $("#reset").on("click", function() {
 function buildHotelOptions(destination, days, adults, children) {
 	var startD = moment().add(7, "days");
 	var endD = startD.clone().add(days, "days");
+	var rooms = "1";
+	if (parseInt(adults) + parseInt(children) > 4) {
+		rooms = "2";
+	}
 	var options = {
 		// "dest": destination.destAirport,
 		"dest": destination.destLat + "," + destination.destLng,
 		"startdate": startD.format("MM/DD/YYYY"),
 		"enddate": endD.format("MM/DD/YYYY"),
-		"rooms": "1",
+		"rooms": rooms,
 		"adults": adults,
 		"children": children
 	};
@@ -152,6 +153,8 @@ function displayMarker(destination) {
 		title: destination.destCity + ", " + destination.destState,
 		animation: google.maps.Animation.DROP
 	});
+	map.setCenter({lat: parseFloat(destination.destLat), lng: parseFloat(destination.destLng)});
+	map.setZoom(8);
 	var w = new google.maps.InfoWindow({
 		content: destination.destCity + ", " + destination.destState
 	});
