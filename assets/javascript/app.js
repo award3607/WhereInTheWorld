@@ -1,6 +1,6 @@
 //global constants
-const hotelUrl = "http://api.hotwire.com/v1/search/hotel";
-const carUrl = "http://api.hotwire.com/v1/search/car";
+const hotelUrl = "https://api.hotwire.com/v1/search/hotel";
+const carUrl = "https://api.hotwire.com/v1/search/car";
 const firebaseConfig = {
 	apiKey: "AIzaSyAis8sLxqMEv00Zmy1h00LwK3GfXul3i0g",
 	authDomain: "whereintheworld-1509580469553.firebaseapp.com",
