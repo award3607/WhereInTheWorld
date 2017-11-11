@@ -3,11 +3,11 @@
 ## Assignments ##
 ------------------
 ### Front End ###
-* Amira
-* Dave
+* Amira Strang
+* Dave Couch
 ### Back End ###
-* Andrew
-* Denise
+* Andrew Ward
+* Denise Ballard
 
 
 
