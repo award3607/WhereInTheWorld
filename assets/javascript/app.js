@@ -13,25 +13,6 @@ const hotwireKey = "4hjyj79mhvxkvswbx5mur2xp";
 
 //global variables
 var destsArr = [];
-
-// var hotelOptions = {
-// 	"dest": "Daytona Beach",
-// 	"startdate": "11/24/2017",
-// 	"enddate": "11/27/2017",
-// 	"rooms": "1",
-// 	"adults": "1",
-// 	"children": "0"
-// };
-
-// var carOptions = {
-// 	"dest":"Atlanta",
-// 	"startdate":"11/24/2017",
-// 	"enddate":"11/27/2017",
-// 	"pickuptime":"10:00",
-// 	"dropofftime":"13:30"
-// };
-
-
 var ref;
 var map;
 var markerArr = [];
@@ -45,35 +26,45 @@ $(document).ready(function() {
 
 $("#submit").on("click", function() {
 	event.preventDefault();
-	var destType = $("#dest-type").val().trim();
+	var destType = $("#dest-type").val().trim().toLowerCase();
 	var tripLength = $("#trip-length").val().trim();
 	var numAdults = parseInt($("#trip-adults").val().trim());
 	var numChildren = parseInt($("#trip-children").val().trim());
 	//console.log(destType, tripLength, numAdults, numChildren);
+	if (destType && tripLength && numAdults && numChildren) {
+		var promiseDests = displayResults(destType);
+		$.when(promiseDests).done(function() {
+			console.log("Firebase calls complete");
+			// console.log(destsArr);
+			//destsArr.forEach(function(dest) {
+				var dest = destsArr[0];
+				displayMarker(dest);
+				var hotelOptions = buildHotelOptions(dest, tripLength, numAdults, numChildren);
+				var carOptions = buildCarOptions(dest, tripLength);
 
-	var promiseDests = displayResults(destType);
-	$.when(promiseDests).done(function() {
-		console.log("Firebase calls complete");
-		// console.log(destsArr);
-		destsArr.forEach(function(dest) {
-			var hotelOptions = buildHotelOptions(dest, tripLength, numAdults, numChildren);
-			var carOptions = buildCarOptions(dest, tripLength);
-
-			var promiseHotel = requestData(hotelUrl, hotelOptions);
-			var promiseCar = requestData(carUrl, carOptions);
-			$.when(promiseHotel, promiseCar).done(function() {
-				// console.log("Hotel response? ");
-				var hotelResult = promiseHotel.responseJSON.Result[0];
-				// console.log(hotelResult);
-				// console.log("Car response? ");
-				var carResult = promiseCar.responseJSON.Result[0]
-				// console.log(carResult);
-				console.log("Hotwire API calls complete");
-				//displayResultRow needs to go in here.
-				displayResultRow(dest, hotelResult, carResult);
-			});
+				var hotelData = requestData(hotelUrl, hotelOptions);
+				var carData = requestData(carUrl, carOptions);
+				$.when(hotelData, carData).done(function() {
+					var hotelResult = hotelData.responseJSON.Result[0];
+					if (!hotelResult) {
+						hotelResult = hotelData.responseJSON.Result.HotelResult;
+					}
+					//console.log("Hotel response");
+					//console.log(hotelResult);
+					// console.log("Car response? ");
+					var carResult = carData.responseJSON.Result[0];
+					// console.log(carResult);
+					console.log("Hotwire API calls complete");
+					//displayResultRow needs to go in here.
+					displayResultRow(dest, hotelResult, carResult);
+				});
+			//});
 		});
-	});
+	}
+	else {
+		console.log("Fill out all fields");
+	}
+		
 });
 
 $("#reset").on("click", function() {
@@ -92,9 +83,8 @@ $("#reset").on("click", function() {
 function buildHotelOptions(destination, days, adults, children) {
 	var startD = moment().add(7, "days");
 	var endD = startD.clone().add(days, "days");
-	//console.log(startD.format("MM/DD/YYYY"), endD.format("MM/DD/YYYY"));
 	var options = {
-		//"dest": "Daytona Beach",
+		// "dest": destination.destAirport,
 		"dest": destination.destLat + "," + destination.destLng,
 		"startdate": startD.format("MM/DD/YYYY"),
 		"enddate": endD.format("MM/DD/YYYY"),
@@ -109,8 +99,8 @@ function buildCarOptions(destination, days) {
 	var startD = moment().add(7, "days");
 	var endD = startD.clone().add(days, "days");
 	var options = {
-		//"dest": "Atlanta",
-		"dest": destination.destLat + "," + destination.destLng,
+		"dest": destination.destAirport,
+		// "dest": destination.destLat + "," + destination.destLng,
 		"startdate": startD.format("MM/DD/YYYY"),
 		"enddate": endD.format("MM/DD/YYYY"),
 		"pickuptime":"10:00",
@@ -130,23 +120,12 @@ function generateSearchUrl(baseUrl, options) {
 
 function requestData(apiUrl, options) {
 	var searchUrl = generateSearchUrl(apiUrl, options);
-	//console.log(searchUrl);
-
 	return $.ajax({
-			url: searchUrl,
-			method: "GET",
-			dataType: 'jsonp',
-   			crossDomain: true
-		})
-		.done(function(response) {
-
-			// console.log(response.Result);
-            var result = response.Result[0];
-            // console.log(result.TotalPrice, result.DeepLink);
-            // var $h = $("<div>").html("<a href=" + result.DeepLink + ">" + result.TotalPrice +"</a>");
-            // $("#results").append($h);
-            // displayResultRow(destsArr[0], result.TotalPrice, result.DeepLink);
-		});
+		url: searchUrl,
+		method: "GET",
+		dataType: 'jsonp',
+		crossDomain: true
+	});
 }
 
 function displayResultRow(destination, hotelData, carData) {
@@ -202,12 +181,12 @@ function processResults(data) {
     //create array of keys
 	var keys = Object.keys(markers);
     keys = shuffle(keys);
-    console.log(keys);
+    //console.log(keys);
 	// console.log(markers);
 	keys.forEach(function(key) {
 		// console.log(markers[key]);
 		destsArr.push(markers[key]);
-		displayMarker(markers[key]);
+		//displayMarker(markers[key]);
 	});
 }
 
